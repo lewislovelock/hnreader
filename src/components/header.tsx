@@ -20,7 +20,6 @@ export function Header() {
   const pathname = usePathname()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  // 当菜单打开时禁止背景滚动
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden'

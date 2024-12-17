@@ -51,9 +51,7 @@ function StoryItemComponent({ story }: StoryItemProps) {
   )
 }
 
-// 使用 memo 包装组件，只有当 props 改变时才重新渲染
 export const StoryItem = memo(StoryItemComponent, (prevProps, nextProps) => {
-  // 自定义比较函数，只比较必要的属性
   return (
     prevProps.story.id === nextProps.story.id &&
     prevProps.story.title === nextProps.story.title &&
