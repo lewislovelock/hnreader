@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { ThemeToggle } from "./theme-toggle"
 import { cn } from "@/lib/utils"
@@ -24,9 +25,18 @@ export function Header() {
           <div className="flex-1 flex items-center">
             <Link
               href="/"
-              className="text-base sm:text-xl font-semibold text-zinc-900 dark:text-white hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors mr-4 sm:mr-8"
+              className="flex items-center mr-4 sm:mr-8 hover:opacity-80 transition-opacity"
             >
-              HN Reader
+              <Image
+                src="/logo.webp"
+                alt="HN Reader"
+                width={32}
+                height={32}
+                className="w-6 h-6 sm:w-7 sm:h-7"
+              />
+              <span className="ml-2 text-xs sm:text-sm font-medium text-zinc-900 dark:text-white">
+                HN Reader
+              </span>
             </Link>
             <nav className="flex items-center space-x-2 sm:space-x-6 overflow-x-auto scrollbar-none">
               {navigation.map((item) => (

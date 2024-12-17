@@ -77,35 +77,36 @@ export function CommentItem({ comment, level = 0, storyId }: CommentProps) {
   return (
     <div className="relative group">
       <div className={cn(
-        "py-2",
+        "py-3",
         level > 0 && "ml-4 border-l-2 border-zinc-200 dark:border-zinc-800",
+        !isCollapsed && "bg-white dark:bg-zinc-900/30"
       )}>
         <div className={cn("relative", indentClass)}>
           {/* Comment Header */}
-          <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+          <div className="flex items-center gap-2 text-sm">
             <button
               onClick={toggleCollapse}
-              className="hover:text-zinc-900 dark:hover:text-white transition-colors"
+              className="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
             >
-              [{isCollapsed ? '+' : '-'}]
+              [{isCollapsed ? '+' : '–'}]
             </button>
-            <span className="font-medium">{comment.by}</span>
-            <span>•</span>
-            <span>{timeAgo}</span>
-            <span>|</span>
+            <span className="font-medium text-zinc-800 dark:text-zinc-200">{comment.by}</span>
+            <span className="text-zinc-400 dark:text-zinc-500">•</span>
+            <span className="text-zinc-500 dark:text-zinc-400">{timeAgo}</span>
+            <span className="text-zinc-400 dark:text-zinc-500">|</span>
             <div className="flex items-center gap-1 text-xs">
               <Link
                 href={`/item/${storyId}`}
-                className="hover:text-zinc-900 dark:hover:text-white transition-colors"
+                className="text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors"
               >
                 root
               </Link>
               {comment.parent && comment.parent !== storyId && (
                 <>
-                  <span>|</span>
+                  <span className="text-zinc-400 dark:text-zinc-500">|</span>
                   <Link
                     href={`/item/${comment.parent}`}
-                    className="hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors"
                   >
                     parent
                   </Link>
@@ -113,10 +114,10 @@ export function CommentItem({ comment, level = 0, storyId }: CommentProps) {
               )}
               {hasReplies && !isLoaded && (
                 <>
-                  <span>|</span>
+                  <span className="text-zinc-400 dark:text-zinc-500">|</span>
                   <button
                     onClick={loadReplies}
-                    className="hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors"
                   >
                     next
                   </button>
@@ -129,10 +130,14 @@ export function CommentItem({ comment, level = 0, storyId }: CommentProps) {
           {!isCollapsed && (
             <>
               <div
-                className="mt-2 text-zinc-600 dark:text-zinc-300 prose prose-zinc dark:prose-invert max-w-none
-                  prose-p:my-2 prose-p:leading-relaxed
-                  prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
-                  prose-code:text-sm prose-code:bg-zinc-100 dark:prose-code:bg-zinc-800 prose-code:px-1 prose-code:rounded"
+                className="mt-2 prose prose-zinc dark:prose-invert max-w-none
+                  prose-p:text-sm prose-p:leading-relaxed
+                  prose-p:text-zinc-800 dark:prose-p:text-zinc-200
+                  prose-a:text-blue-700 dark:prose-a:text-blue-300 prose-a:no-underline hover:prose-a:underline
+                  prose-code:text-xs prose-code:bg-zinc-100 dark:prose-code:bg-zinc-800/80 prose-code:px-1 prose-code:rounded
+                  prose-pre:bg-zinc-100 dark:prose-pre:bg-zinc-800/80 prose-pre:p-3 prose-pre:rounded-md
+                  prose-p:my-2 prose-headings:my-4
+                  selection:bg-zinc-100 dark:selection:bg-zinc-800"
                 dangerouslySetInnerHTML={{ __html: comment.text }}
               />
 
@@ -142,7 +147,7 @@ export function CommentItem({ comment, level = 0, storyId }: CommentProps) {
                   {error ? (
                     <button
                       onClick={() => loadReplies()}
-                      className="text-sm text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors"
+                      className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors"
                     >
                       Error loading replies. Click to retry.
                     </button>
@@ -151,7 +156,7 @@ export function CommentItem({ comment, level = 0, storyId }: CommentProps) {
                       onClick={loadReplies}
                       disabled={isLoading}
                       className={cn(
-                        "text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors",
+                        "text-sm text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors",
                         isLoading && "opacity-50 cursor-wait"
                       )}
                     >
