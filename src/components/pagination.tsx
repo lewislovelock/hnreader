@@ -34,8 +34,8 @@ export function Pagination({ currentPage, hasMore, baseUrl, pageCount }: Paginat
     pages.push(1)
     
     // Pages around current page
-    let start = Math.max(2, currentPage - 1)
-    let end = Math.min(pageCount - 1, currentPage + 1)
+    const start = Math.max(2, currentPage - 1)
+    const end = Math.min(pageCount - 1, currentPage + 1)
     
     // Add ellipsis if needed
     if (start > 2) pages.push('...')

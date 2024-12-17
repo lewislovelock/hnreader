@@ -4,7 +4,7 @@
  */
 export class HNCache {
   private static instance: HNCache;
-  private cache: Map<string, { data: any; timestamp: number }>;
+  private cache: Map<string, { data: unknown; timestamp: number }>;
   private readonly TTL = 5 * 60 * 1000; // 5 minutes TTL
 
   private constructor() {
@@ -41,7 +41,7 @@ export class HNCache {
    * @param key Cache key
    * @param data Data to cache
    */
-  public set(key: string, data: any): void {
+  public set(key: string, data: unknown): void {
     this.cache.set(key, {
       data,
       timestamp: Date.now(),

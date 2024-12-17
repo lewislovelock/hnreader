@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback, memo, useMemo } from "react"
+import { useState, useCallback, memo, useMemo } from "react"
 import { formatDistanceToNow } from "date-fns"
 import type { Comment } from "@/lib/hn/types"
 import { cn } from "@/lib/utils"
