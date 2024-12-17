@@ -7,12 +7,15 @@ export const metadata: Metadata = {
   description: "Ask HN stories from Hacker News",
 }
 
-export default function AskStoriesPage({
+export default async function AskStoriesPage({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const page = typeof searchParams?.p === 'string' ? parseInt(searchParams.p) : 1
+  const params = await searchParams
+  const page = params?.p ? 
+    typeof params.p === 'string' ? parseInt(params.p) : 1
+    : 1
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-900">

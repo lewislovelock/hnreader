@@ -1,5 +1,6 @@
 import { StoryContent } from "@/components/story-content"
 import type { Story, Comment } from "@/lib/hn/types"
+import { Metadata } from "next"
 
 async function fetchWithRetry(url: string, retries = 3): Promise<Response> {
   for (let i = 0; i < retries; i++) {
@@ -25,13 +26,22 @@ async function fetchItem<T>(id: number): Promise<T> {
 }
 
 interface PageProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const resolvedParams = await params
+  const story = await fetchItem<Story>(parseInt(resolvedParams.id))
+  
+  return {
+    title: `${story.title} | HN Reader`,
+    description: story.text || `Discussion about ${story.title} on Hacker News`,
+  }
 }
 
 export default async function StoryPage({ params }: PageProps) {
-  // Ensure params is awaited
-  const { id } = await Promise.resolve(params)
-  const story = await fetchItem<Story>(parseInt(id))
+  const resolvedParams = await params
+  const story = await fetchItem<Story>(parseInt(resolvedParams.id))
 
   let comments: Comment[] = []
   if (story.kids) {
