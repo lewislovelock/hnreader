@@ -1,14 +1,14 @@
 import { Header } from "@/components/header"
 import { StoryList } from "@/components/story-list"
 
+type SearchParams = { [key: string]: string | string[] | undefined }
+
 interface PageProps {
-  searchParams: {
-    [key: string]: string | string[] | undefined
-  }
+  searchParams: SearchParams
 }
 
-export default function ShowStoriesPage({ searchParams }: PageProps) {
-  const page = searchParams.p ? parseInt(searchParams.p as string) : 1
+export default async function ShowStoriesPage({ searchParams }: PageProps) {
+  const page = typeof searchParams.p === 'string' ? parseInt(searchParams.p) : 1
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-900">
