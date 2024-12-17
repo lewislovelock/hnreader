@@ -1,8 +1,9 @@
 # HN Reader
 
-A modern, clean interface for reading Hacker News stories. Built with Next.js 13+, Tailwind CSS, and shadcn/ui.
+A modern, clean interface for reading Hacker News stories. Built with Next.js 15, Tailwind CSS, and shadcn/ui.
 
-![HN Reader Screenshot](/public/screenshot.png)
+![HN Reader Light Mode](/public/preview-light.jpeg)
+![HN Reader Dark Mode](/public/preview-dark.jpeg)
 
 ## Features
 
@@ -19,7 +20,7 @@ A modern, clean interface for reading Hacker News stories. Built with Next.js 13
 
 ## Tech Stack
 
-- [Next.js 13+](https://nextjs.org/) - React framework
+- [Next.js 15+](https://nextjs.org/) - React framework
 - [Tailwind CSS](https://tailwindcss.com/) - Styling
 - [shadcn/ui](https://ui.shadcn.com/) - UI components
 - [TypeScript](https://www.typescriptlang.org/) - Type safety
@@ -86,6 +87,25 @@ src/
 - Error handling with retry options
 - Responsive design for all screen sizes
 
+## Roadmap
+
+- [ ] Performance Optimization
+  - Implement virtual scrolling for long lists
+  - Add service worker for offline support
+  - Optimize image loading and caching
+
+- [ ] Feature Enhancements
+  - Add search functionality
+  - Implement user profiles
+  - Add story bookmarking
+  - Support for multiple languages
+
+- [ ] Developer Experience
+  - Add comprehensive testing
+  - Improve error handling
+  - Add performance monitoring
+  - Enhance documentation
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -93,42 +113,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Roadmap
-
-以下是计划中的改进：
-
-### 性能优化
-- [ ] 使用React.memo优化组件重渲染
-- [ ] 实现虚拟滚动以优化长列表性能
-- [ ] 优化图片和资源加载
-- [ ] 实现组件懒加载
-- [ ] 添加性能监控和分析
-
-### 可访问性优化
-- [ ] 添加适当的ARIA属性
-- [ ] 改进键盘导航体验
-- [ ] 增强屏幕阅读器支持
-- [ ] 实现高对比度主题
-- [ ] 添加跳过导航链接
-
-### 移动端优化 ✅
-- [x] 优化小屏幕设备的UI布局
-- [x] 优化移动端的字体大小和间距
-
-### 功能增强
-- [ ] 添加用户偏好设置
-- [ ] 实现故事收藏功能
-- [ ] 添加搜索功能
-- [ ] 支持多语言本地化
-- [ ] 添加阅读进度保存
-- [ ] 实现PWA支持
-
-### 开发体验
-- [ ] 添加单元测试和集成测试
-- [ ] 改进错误处理和日志记录
-- [ ] 优化构建和部署流程
-- [ ] 完善开发文档
 
 ## Acknowledgments
 
