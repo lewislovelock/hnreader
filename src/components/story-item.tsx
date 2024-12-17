@@ -27,11 +27,11 @@ export function StoryItem({ story }: { story: Story }) {
             </Link>
           )}
         </h2>
-        {story.text && (
+        {/* {story.text && (
           <p className="text-base text-zinc-600 dark:text-zinc-300 leading-relaxed line-clamp-3">
             {story.text}
           </p>
-        )}
+        )} */}
       </div>
       <div className="mt-4 flex flex-wrap gap-2 sm:gap-4 text-sm text-zinc-500 dark:text-zinc-400 font-medium">
         <span>{story.score} points</span>
