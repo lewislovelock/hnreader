@@ -31,15 +31,15 @@ export function StoryList({ type, page = 1, baseUrl }: StoryListProps) {
   // 加载状态 - 显示骨架屏
   if (loading) {
     return (
-      <div className="space-y-8">
+      <div className="space-y-4 sm:space-y-8">
         {[...Array(10)].map((_, i) => (
           <div
             key={i}
-            className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-6 animate-pulse"
+            className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-4 sm:p-6 animate-pulse"
           >
             {/* 骨架屏 UI */}
-            <div className="h-6 bg-zinc-200 dark:bg-zinc-800 rounded w-3/4 mb-4" />
-            <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-1/4" />
+            <div className="h-5 sm:h-6 bg-zinc-200 dark:bg-zinc-800 rounded w-3/4 mb-3 sm:mb-4" />
+            <div className="h-3 sm:h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-1/4" />
           </div>
         ))}
       </div>
@@ -49,7 +49,7 @@ export function StoryList({ type, page = 1, baseUrl }: StoryListProps) {
   // 正常状态 - 显示故事列表
   return (
     <>
-      <div className="space-y-8">
+      <div className="space-y-4 sm:space-y-8">
         {stories.map((story) => (
           <StoryItem key={story.id} story={story} />
         ))}

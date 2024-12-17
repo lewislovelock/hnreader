@@ -9,9 +9,9 @@ export function StoryItem({ story }: { story: Story }) {
   const timeAgo = formatDistanceToNow(timestamp, { addSuffix: true })
   
   return (
-    <article className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-6 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-      <div className="space-y-2">
-        <h2 className="text-xl font-semibold text-zinc-900 dark:text-white">
+    <article className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-4 sm:p-6 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
+      <div className="space-y-1.5 sm:space-y-2">
+        <h2 className="text-lg sm:text-xl font-semibold text-zinc-900 dark:text-white">
           {story.url ? (
             <a
               href={story.url}
@@ -28,23 +28,23 @@ export function StoryItem({ story }: { story: Story }) {
           )}
         </h2>
         {story.text && (
-          <p className="text-zinc-600 dark:text-zinc-400 line-clamp-3">
+          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 line-clamp-3">
             {story.text}
           </p>
         )}
       </div>
-      <div className="mt-4 flex items-center space-x-4 text-sm text-zinc-500 dark:text-zinc-400">
+      <div className="mt-3 sm:mt-4 flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
         <span>{story.score} points</span>
-        <span>•</span>
+        <span className="hidden sm:inline">•</span>
         <span>by {story.by}</span>
-        <span>•</span>
+        <span className="hidden sm:inline">•</span>
         <Link
           href={`/item/${story.id}`}
           className="hover:text-zinc-900 dark:hover:text-white"
         >
           {story.descendants} comments
         </Link>
-        <span>•</span>
+        <span className="hidden sm:inline">•</span>
         <span>{timeAgo}</span>
       </div>
     </article>
