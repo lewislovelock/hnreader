@@ -4,10 +4,12 @@ import { useState } from "react"
 import { formatDistanceToNow } from "date-fns"
 import type { Comment } from "@/lib/hn/types"
 import { cn } from "@/lib/utils"
+import Link from "next/link"
 
 interface CommentProps {
   comment: Comment
   level?: number
+  storyId: number
 }
 
 async function fetchWithRetry(url: string, retries = 3): Promise<Response> {
@@ -23,7 +25,7 @@ async function fetchWithRetry(url: string, retries = 3): Promise<Response> {
   throw new Error(`Failed to fetch ${url} after ${retries} retries`)
 }
 
-export function CommentItem({ comment, level = 0 }: CommentProps) {
+export function CommentItem({ comment, level = 0, storyId }: CommentProps) {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -70,59 +72,112 @@ export function CommentItem({ comment, level = 0 }: CommentProps) {
     return null
   }
 
+  const indentClass = level > 0 ? `pl-${Math.min(level * 4, 12)}` : ''
+
   return (
-    <div className={cn("pl-4 border-l border-zinc-200 dark:border-zinc-800", level > 0 && "mt-4")}>
-      <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400 mb-2">
-        <button
-          onClick={toggleCollapse}
-          className="hover:text-zinc-900 dark:hover:text-white transition-colors"
-        >
-          [{isCollapsed ? '+' : '-'}]
-        </button>
-        <span>{comment.by}</span>
-        <span>•</span>
-        <span>{timeAgo}</span>
-      </div>
-      {!isCollapsed && (
-        <>
-          <div
-            className="text-zinc-600 dark:text-zinc-300 prose prose-zinc dark:prose-invert max-w-none mb-4"
-            dangerouslySetInnerHTML={{ __html: comment.text }}
-          />
-          {hasReplies && !isLoaded && (
-            <div className="mb-4">
-              {error ? (
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => loadReplies()}
-                    className="text-sm text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors"
+    <div className="relative group">
+      <div className={cn(
+        "py-2",
+        level > 0 && "ml-4 border-l-2 border-zinc-200 dark:border-zinc-800",
+      )}>
+        <div className={cn("relative", indentClass)}>
+          {/* Comment Header */}
+          <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+            <button
+              onClick={toggleCollapse}
+              className="hover:text-zinc-900 dark:hover:text-white transition-colors"
+            >
+              [{isCollapsed ? '+' : '-'}]
+            </button>
+            <span className="font-medium">{comment.by}</span>
+            <span>•</span>
+            <span>{timeAgo}</span>
+            <span>|</span>
+            <div className="flex items-center gap-1 text-xs">
+              <Link
+                href={`/item/${storyId}`}
+                className="hover:text-zinc-900 dark:hover:text-white transition-colors"
+              >
+                root
+              </Link>
+              {comment.parent && comment.parent !== storyId && (
+                <>
+                  <span>|</span>
+                  <Link
+                    href={`/item/${comment.parent}`}
+                    className="hover:text-zinc-900 dark:hover:text-white transition-colors"
                   >
-                    Error loading replies. Click to retry.
+                    parent
+                  </Link>
+                </>
+              )}
+              {hasReplies && !isLoaded && (
+                <>
+                  <span>|</span>
+                  <button
+                    onClick={loadReplies}
+                    className="hover:text-zinc-900 dark:hover:text-white transition-colors"
+                  >
+                    next
                   </button>
-                </div>
-              ) : (
-                <button
-                  onClick={loadReplies}
-                  disabled={isLoading}
-                  className={cn(
-                    "text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors",
-                    isLoading && "opacity-50 cursor-wait"
-                  )}
-                >
-                  {isLoading ? (
-                    "Loading replies..."
-                  ) : (
-                    `${comment.kids?.length} ${comment.kids?.length === 1 ? 'reply' : 'replies'}`
-                  )}
-                </button>
+                </>
               )}
             </div>
+          </div>
+
+          {/* Comment Content */}
+          {!isCollapsed && (
+            <>
+              <div
+                className="mt-2 text-zinc-600 dark:text-zinc-300 prose prose-zinc dark:prose-invert max-w-none
+                  prose-p:my-2 prose-p:leading-relaxed
+                  prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+                  prose-code:text-sm prose-code:bg-zinc-100 dark:prose-code:bg-zinc-800 prose-code:px-1 prose-code:rounded"
+                dangerouslySetInnerHTML={{ __html: comment.text }}
+              />
+
+              {/* Reply Loading State */}
+              {hasReplies && !isLoaded && (
+                <div className="mt-2">
+                  {error ? (
+                    <button
+                      onClick={() => loadReplies()}
+                      className="text-sm text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors"
+                    >
+                      Error loading replies. Click to retry.
+                    </button>
+                  ) : (
+                    <button
+                      onClick={loadReplies}
+                      disabled={isLoading}
+                      className={cn(
+                        "text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors",
+                        isLoading && "opacity-50 cursor-wait"
+                      )}
+                    >
+                      {isLoading ? (
+                        "Loading replies..."
+                      ) : (
+                        `${comment.kids?.length} ${comment.kids?.length === 1 ? 'reply' : 'replies'}`
+                      )}
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {/* Nested Comments */}
+              {isLoaded && replies.map(reply => (
+                <CommentItem 
+                  key={reply.id} 
+                  comment={reply} 
+                  level={level + 1} 
+                  storyId={storyId} 
+                />
+              ))}
+            </>
           )}
-          {isLoaded && replies.map(reply => (
-            <CommentItem key={reply.id} comment={reply} level={level + 1} />
-          ))}
-        </>
-      )}
+        </div>
+      </div>
     </div>
   )
 } 
