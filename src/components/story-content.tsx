@@ -4,6 +4,7 @@ import { Header } from "@/components/header"
 import { CommentList } from "@/components/comment-list"
 import { formatDistanceToNow } from "date-fns"
 import type { Story, Comment } from "@/lib/hn/types"
+import DOMPurify from 'dompurify';
 
 interface StoryContentProps {
   story: Story
@@ -36,8 +37,10 @@ export function StoryContent({ story, comments }: StoryContentProps) {
             </h1>
             {story.text && (
               <div
-                className="text-zinc-600 dark:text-zinc-300 prose prose-zinc dark:prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: story.text }}
+                className="prose dark:prose-invert"
+                dangerouslySetInnerHTML={{ 
+                  __html: DOMPurify.sanitize(story.text) 
+                }}
               />
             )}
             <div className="flex items-center space-x-4 text-sm text-zinc-500 dark:text-zinc-400">
