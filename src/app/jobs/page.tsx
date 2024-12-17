@@ -2,12 +2,13 @@ import { Header } from "@/components/header"
 import { StoryList } from "@/components/story-list"
 
 interface PageProps {
-  searchParams: { p?: string }
+  searchParams: {
+    [key: string]: string | string[] | undefined
+  }
 }
 
-export default async function JobStoriesPage({ searchParams }: PageProps) {
-  const { p } = await Promise.resolve(searchParams)
-  const page = p ? parseInt(p) : 1
+export default function JobStoriesPage({ searchParams }: PageProps) {
+  const page = searchParams.p ? parseInt(searchParams.p as string) : 1
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-900">
