@@ -3,8 +3,13 @@
 import Link from "next/link"
 import { formatDistanceToNow } from "date-fns"
 import type { Story } from "@/lib/hn/types"
+import { memo } from "react"
 
-export function StoryItem({ story }: { story: Story }) {
+interface StoryItemProps {
+  story: Story
+}
+
+function StoryItemComponent({ story }: StoryItemProps) {
   const timestamp = new Date(story.time * 1000)
   const timeAgo = formatDistanceToNow(timestamp, { addSuffix: true })
   
@@ -27,11 +32,6 @@ export function StoryItem({ story }: { story: Story }) {
             </Link>
           )}
         </h2>
-        {/* {story.text && (
-          <p className="text-base text-zinc-600 dark:text-zinc-300 leading-relaxed line-clamp-3">
-            {story.text}
-          </p>
-        )} */}
       </div>
       <div className="mt-4 flex flex-wrap gap-2 sm:gap-4 text-sm text-zinc-500 dark:text-zinc-400 font-medium">
         <span>{story.score} points</span>
@@ -49,4 +49,15 @@ export function StoryItem({ story }: { story: Story }) {
       </div>
     </article>
   )
-} 
+}
+
+// 使用 memo 包装组件，只有当 props 改变时才重新渲染
+export const StoryItem = memo(StoryItemComponent, (prevProps, nextProps) => {
+  // 自定义比较函数，只比较必要的属性
+  return (
+    prevProps.story.id === nextProps.story.id &&
+    prevProps.story.title === nextProps.story.title &&
+    prevProps.story.score === nextProps.story.score &&
+    prevProps.story.descendants === nextProps.story.descendants
+  )
+}) 

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback, memo, useMemo } from "react"
 import { formatDistanceToNow } from "date-fns"
 import type { Comment } from "@/lib/hn/types"
 import { cn } from "@/lib/utils"
@@ -25,21 +25,26 @@ async function fetchWithRetry(url: string, retries = 3): Promise<Response> {
   throw new Error(`Failed to fetch ${url} after ${retries} retries`)
 }
 
-export function CommentItem({ comment, level = 0, storyId }: CommentProps) {
+function CommentItemComponent({ comment, level = 0, storyId }: CommentProps) {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
   const [replies, setReplies] = useState<Comment[]>([])
-  const hasReplies = comment.kids && comment.kids.length > 0
-  const timestamp = new Date(comment.time * 1000)
-  const timeAgo = formatDistanceToNow(timestamp, { addSuffix: true })
 
-  const toggleCollapse = () => {
-    setIsCollapsed(!isCollapsed)
-  }
+  // 使用 useMemo 缓存计算值
+  const hasReplies = useMemo(() => comment.kids && comment.kids.length > 0, [comment.kids])
+  const timeAgo = useMemo(() => {
+    const timestamp = new Date(comment.time * 1000)
+    return formatDistanceToNow(timestamp, { addSuffix: true })
+  }, [comment.time])
 
-  const loadReplies = async () => {
+  // 使用 useCallback 缓存函数
+  const toggleCollapse = useCallback(() => {
+    setIsCollapsed(prev => !prev)
+  }, [])
+
+  const loadReplies = useCallback(async () => {
     if (!comment.kids || isLoaded || isLoading) return
     
     try {
@@ -66,7 +71,7 @@ export function CommentItem({ comment, level = 0, storyId }: CommentProps) {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [comment.kids, isLoaded, isLoading])
 
   if (comment.deleted || comment.dead) {
     return null
@@ -185,4 +190,14 @@ export function CommentItem({ comment, level = 0, storyId }: CommentProps) {
       </div>
     </div>
   )
-} 
+}
+
+// 使用 memo 包装组件，只有当必要的 props 改变时才重新渲染
+export const CommentItem = memo(CommentItemComponent, (prevProps, nextProps) => {
+  return (
+    prevProps.comment.id === nextProps.comment.id &&
+    prevProps.comment.text === nextProps.comment.text &&
+    prevProps.level === nextProps.level &&
+    prevProps.storyId === nextProps.storyId
+  )
+}) 
