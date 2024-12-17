@@ -1,14 +1,18 @@
 import { Header } from "@/components/header"
 import { StoryList } from "@/components/story-list"
+import { Metadata } from "next"
 
-type SearchParams = { [key: string]: string | string[] | undefined }
-
-interface PageProps {
-  searchParams: SearchParams
+export const metadata: Metadata = {
+  title: "HN Reader - Show HN",
+  description: "Show HN stories from Hacker News",
 }
 
-export default async function ShowStoriesPage({ searchParams }: PageProps) {
-  const page = typeof searchParams.p === 'string' ? parseInt(searchParams.p) : 1
+export default function ShowStoriesPage({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined }
+}) {
+  const page = typeof searchParams?.p === 'string' ? parseInt(searchParams.p) : 1
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-900">
