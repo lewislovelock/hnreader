@@ -41,8 +41,12 @@ export function StoryList({ type, page = 1, baseUrl }: StoryListProps) {
   return (
     <>
       <div className="space-y-4 sm:space-y-8">
-        {stories.map((story) => (
-          <StoryItem key={story.id} story={story} />
+        {stories.map((story, index) => (
+          <StoryItem 
+            key={story.id} 
+            story={story} 
+            number={(page - 1) * 30 + index + 1}
+          />
         ))}
       </div>
       <Pagination currentPage={page} hasMore={hasMore} baseUrl={baseUrl} />
